@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import hanze.nl.tijdtools.TijdFuncties;
 
 public class Runner {
 
@@ -35,8 +34,8 @@ public class Runner {
 		Iterator<Bus> itr = actieveBussen.iterator();
 		while (itr.hasNext()) {
 			Bus bus = itr.next();
-			boolean eindpuntBereikt = bus.move();
-			if (eindpuntBereikt) {
+			bus.move();
+			if (bus.isBijLaatsteHalte()) {
 				bus.sendLastETA(nu);
 				itr.remove();
 			}

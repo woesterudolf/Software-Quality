@@ -31,21 +31,24 @@ public class Bus{
 		Positie volgendeHalte = lijn.getHalte(halteNummer+richting).getPositie();
 		totVolgendeHalte = lijn.getHalte(halteNummer).afstand(volgendeHalte);
 	}
+
+	public boolean isBijLaatsteHalte() {
+		int nextStop = halteNummer+richting;
+		return nextStop > lijn.getLengte()-1 || nextStop < 0;
+	}
 	
-	public boolean halteBereikt(){
+	public void halteBereikt(){
 		halteNummer+=richting;
 		bijHalte=true;
-		if ((halteNummer>=lijn.getLengte()-1) || (halteNummer == 0)) {
+		if (isBijLaatsteHalte()) {
 			System.out.printf("Bus %s heeft eindpunt (halte %s, richting %d) bereikt.%n", 
 					lijn.name(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer));
-			return true;
 		}
 		else {
 			System.out.printf("Bus %s heeft halte %s, richting %d bereikt.%n", 
 					lijn.name(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer));		
 			naarVolgendeHalte();
-		}		
-		return false;
+		}
 	}
 	
 	public void start() {
@@ -55,8 +58,7 @@ public class Bus{
 		naarVolgendeHalte();
 	}
 	
-	public boolean move(){
-		boolean eindpuntBereikt = false;
+	public void move(){
 		bijHalte=false;
 		if (halteNummer == -1) {
 			start();
@@ -64,10 +66,9 @@ public class Bus{
 		else {
 			totVolgendeHalte--;
 			if (totVolgendeHalte==0){
-				eindpuntBereikt=halteBereikt();
+				halteBereikt();
 			}
 		}
-		return eindpuntBereikt;
 	}
 	
 	public void sendETAs(int nu){
